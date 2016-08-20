@@ -32,51 +32,15 @@
         <script>
             console.log("Test");
 
-            /*var evntS = null;
-
-            function start(){
-                console.log("This works");
-                document.getElementById("test").textContent="Start function started";
-                evntS = new EventSource("http://localhost:8079/SSEServlet");
-
-                evntS.onopen=function(){
-                    displayTextArea.value+= "Connected..." + "\n";
-                };
-                console.log("onopen finished");
-                evntS.onmessage = function(message){
-                    console.log("onMessage");
-                    console.log(message.data);
-                    document.getElementById("test2").textContent="onMessage Started";
-                    displayTextArea.value += message.data+"\n\n";
-                };
-                evntS.onerror=function(){
-                    displayTextArea.value +="Error Occurred..."+"\n";
-                };
-
-                startButton.disabled = true;
-            }
-            function endserver(){
-                evntS.close();
-                document.getElementById("test").textContent="...";
-                startButton.disabled = false;
-            }
-            function clearserver() {
-                displayTextArea.value = "";
-                document.getElementById("test").textContent = "...";
-            }*/
 
             var eventSource = null;
-            //function start() {
+            
                 console.log("dup");
                 eventSource = new EventSource("http://localhost:8078/SSEServlet");
                 eventSource.addEventListener("Notif", handleNotif, false);
                 eventSource.addEventListener("Time", handleTime,false);
                 eventSource.addEventListener("Message",handleMessage,false);
-                /*eventSource.onmessage = function(event) {
-                displayTextArea.value = event.data + "\n\n";
-            }
-                startButton.disabled=true;
-            }*/
+                
             function handleNotif(event) {
                 var ev = event.data;
                 displayTextArea.value = ev + "\n\n";
