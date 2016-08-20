@@ -43,12 +43,11 @@ public class SSEServlet extends HttpServlet {
                 datamessage=null;
             }
                 tempmes = tempmes + datamessage;
-                //tempmes=message;
+               
                 String mes;
                 mes = String.valueOf(tempmes);
                 if (mes.startsWith("data:") == false) {
                     writer.write("event: Message\n");
-                    //writer.write("data:" + tempmes + "\n\n");
                     writer.write(tempmes + "\n\n");
                     tempmes = tempmes + "\n";
 
@@ -56,36 +55,6 @@ public class SSEServlet extends HttpServlet {
 
         }
     }
-
-
-        /* PrintWriter writer = response.getWriter();
-            writer.write("Notifications:" + String.valueOf(notif) +"\n\n" );*/
-
-
-
-
-
-       /* PrintWriter printWriter;
-        printWriter = null;
-        response.getWriter().println("Does it work?");
-        response.getWriter().flush();
-        for (int i=0;i<1000;i++){
-
-                response.getWriter().println("Does it work?");
-                response.getWriter().flush();
-                double rand = Math.random()*10000;
-                printWriter = response.getWriter();
-                printWriter.write("Data: " + "[Next server check in " + Math.round(rand / 1000) + " seconds]\n\n");
-                printWriter.write("Data: " + "Time: " + Calendar.getInstance().getTime() + " \n\n");
-                //response.flushBuffer();
-            try {
-                Thread.sleep((long)rand);
-            } catch (InterruptedException e){
-                e.printStackTrace();
-                break;
-            }
-        }
-        printWriter.close();*/
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -106,17 +75,3 @@ public class SSEServlet extends HttpServlet {
     }
 
 }
-/*
-if (message!= null) {
-        message="data:"+message;
-        tempmes = tempmes + message;
-        tempmes=message;
-        String mes;
-        mes = String.valueOf(tempmes);
-        //if(mes.startsWith("data:data")==false) {
-        writer.write("event: Message\n");
-        //writer.write("data:" + tempmes + "\n\n");
-        writer.write(tempmes + "\n\n");
-        tempmes = tempmes + "\n";
-        }
-        }*/
