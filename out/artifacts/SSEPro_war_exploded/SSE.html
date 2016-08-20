@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Server Sent Event</title>
+        <style>
+            body{
+                color:			#ffffff;
+                background-color:dimgrey;
+            }
+            button
+            {
+
+                color:			#ffffff;
+                border: 0;
+                background-color:	#0284c3;
+                padding: 11px 30px;
+                font-size: 14px;
+            }
+            .pure-button
+            {
+
+                color:			#ffffff;
+                border: 0;
+                background-color:	#0284c3;
+                padding: 11px 30px;
+                font-size: 14px;
+            }
+
+        </style>
+        <script src="EventSource.js"></script>
+        <script>
+            console.log("Test");
+
+            /*var evntS = null;
+
+            function start(){
+                console.log("This works");
+                document.getElementById("test").textContent="Start function started";
+                evntS = new EventSource("http://localhost:8079/SSEServlet");
+
+                evntS.onopen=function(){
+                    displayTextArea.value+= "Connected..." + "\n";
+                };
+                console.log("onopen finished");
+                evntS.onmessage = function(message){
+                    console.log("onMessage");
+                    console.log(message.data);
+                    document.getElementById("test2").textContent="onMessage Started";
+                    displayTextArea.value += message.data+"\n\n";
+                };
+                evntS.onerror=function(){
+                    displayTextArea.value +="Error Occurred..."+"\n";
+                };
+
+                startButton.disabled = true;
+            }
+            function endserver(){
+                evntS.close();
+                document.getElementById("test").textContent="...";
+                startButton.disabled = false;
+            }
+            function clearserver() {
+                displayTextArea.value = "";
+                document.getElementById("test").textContent = "...";
+            }*/
+
+            var eventSource = null;
+            //function start() {
+                console.log("dup");
+                eventSource = new EventSource("http://localhost:8078/SSEServlet");
+                eventSource.addEventListener("Notif", handleNotif, false);
+                eventSource.addEventListener("Time", handleTime,false);
+                eventSource.addEventListener("Message",handleMessage,false);
+                /*eventSource.onmessage = function(event) {
+                displayTextArea.value = event.data + "\n\n";
+            }
+                startButton.disabled=true;
+            }*/
+            function handleNotif(event) {
+                var ev = event.data;
+                displayTextArea.value = ev + "\n\n";
+                notifbar.innerHTML=ev;
+            }
+            function handleTime(event){
+                displayTextArea2.value = event.data + "\n\n";
+            }
+            function handleMessage(event) {
+                var ev=event.data;
+                if(ev.startsWith("data:data:")!=true) {
+                    textDisplay.value = ev + "\n\n";
+                    console.log("1");
+                    checkTextareaHeight();
+                }
+                else if (ev.startsWith("data:")==false) {
+                    textDisplay.value = textDisplay.value+ev +"\n\n";
+                    checkTextareaHeight();
+                    console.log("2");
+                }
+            }
+            //startButton.disabled=true;
+            //}
+            function endserver(){
+                eventSource.close();
+                startButton.disabled=false;
+            }
+            function clearserver(){
+                displayTextArea.value="";
+            }
+            if (typeof String.prototype.startsWith != "function"){
+                String.prototype.startsWith = function(str){
+                    return this.indexOf(str)==0;
+                }
+            }
+            function checkTextareaHeight(){
+                var textarea = document.getElementById("textDisplay");
+                if(textarea.selectionStart == textarea.selectionEnd) {
+                    textarea.scrollTop = textarea.scrollHeight;
+                }
+            }
+
+        </script>
+    </head>
+
+<body>
+    <header>
+        <p id="notifbar">Notifications:</p>
+    </header>
+    <h1>SSE TEST</h1>
+
+    <textarea id="displayTextArea" class="display" readonly= "readonly" rows="3" cols="30"></textarea><br/>
+    <textarea id="displayTextArea2" class="display"readonly= "readonly" rows="3" cols="30"></textarea><br/><br/>
+    <textarea id="textDisplay" class="display" readonly="readonly" rows="15" cols="50"></textarea><br/><br/>
+
+     <form method="POST" name="notbutton" action="http://localhost:8078/SSEServlet" onkeydown="if(event.keyCode == 13)
+                    document.getElementById('notifybutton').click();">
+        <textarea type="text" name="textMessage" rows="8" cols="50" class="display" autofocus="autofocus"/></textarea><br/><br/>
+        <input type="submit" id="notifybutton" value="Send" class="pure-button" name="sub" />
+         <input type="submit" id="cleanbutton" value="Clear" class="pure-button" name="clear" onclick="clearserver()"/>
+     </form>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<script>
+var eventSource = null;
+
+eventSource = new EventSource("http://localhost:8078/SSEServlet");
+eventSource.addEventListener("Notif", handleNotif, false);
+eventSource.addEventListener("Time", handleTime,false);
+eventSource.addEventListener("Message",handleMessage,false);
+
+function handleNotif(event) {
+    var ev = event.data;
+    displayTextArea.value = ev + "\n\n";
+    notifbar.innerHTML=ev;
+}
+
+function handleTime(event){
+    displayTextArea2.value = event.data + "\n\n";
+}
+
+function handleMessage(event) {
+    var ev=event.data;
+    if(ev.startsWith("data:data:")!=true) {
+        textDisplay.value = ev + "\n\n";
+        console.log("1");
+        checkTextareaHeight();
+    }
+    else if (ev.startsWith("data:")==false) {
+        textDisplay.value = textDisplay.value+ev +"\n\n";
+        checkTextareaHeight();
+        console.log("2");
+    }
+}
+
+function clearserver(){
+    displayTextArea.value="";
+}
+
+if (typeof String.prototype.startsWith != "function"){
+    String.prototype.startsWith = function(str){
+    return this.indexOf(str)==0;
+    }
+}
+
+function checkTextareaHeight(){
+    var textarea = document.getElementById("textDisplay");
+    if(textarea.selectionStart == textarea.selectionEnd) {
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+}
+
+</script>
